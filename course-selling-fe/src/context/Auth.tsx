@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           password: formData.password,
         }
       );
+      localStorage.setItem("user", JSON.stringify(userData.data.user));
       navigate("/");
     } catch (e) {
       console.log(e);

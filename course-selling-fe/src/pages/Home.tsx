@@ -14,15 +14,6 @@ export interface CourseDataProps {
 export const Home = () => {
   const navigate = useNavigate();
   const [courseData, setCourseData] = useState<CourseDataProps[]>();
-  let user = "Anonymous";
-  let userTag = "AN";
-  let author = "Anonymous";
-
-  const [wishList, setWishList] = useState([]);
-  const handleWishList = () => {
-    setWishList([]);
-    navigate("/wishlist");
-  };
 
   useEffect(() => {
     getCourses();
@@ -45,19 +36,30 @@ export const Home = () => {
     }
   };
 
+  const jsonObj = JSON.parse(
+    localStorage.getItem("user") ?? '{firstName:"A", lastName:`N`}'
+  );
+  const firstName = jsonObj.firstName;
+  const lastName = jsonObj.lastName;
+  const userTag = firstName[0] + lastName[0];
+  const author = "Nassar hussian";
   return (
     <div>
-      <AppBar handleWishList={handleWishList} />
+      <AppBar />
       <section className="max-w-7xl mx-auto">
         <div className="flex gap-4 items-center py-4">
           <div className="flex items-center">
-            <Circle person={userTag} width={8} height={8} />
+            <Circle person={userTag} width={"3rem"} height={"3rem"} />
           </div>
 
-          <div className="font-semibold text-lg">Welcome back, {user}</div>
+          <div className="font-bold text-2xl">
+            Welcome back, {firstName + ` ` + lastName}
+          </div>
         </div>
 
         <div>
+          <h2 className="font-semibold text-3xl py-2">What to learn next</h2>
+          <h3 className="font-bold text-xl py-2"> Recommended for you</h3>
           <CourseCard courseData={courseData} author={author} />
           {/* {courseData?.map((course) => (
             <div>

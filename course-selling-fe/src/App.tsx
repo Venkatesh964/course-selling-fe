@@ -3,20 +3,29 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Signin } from "./pages/Signin";
 import { Home } from "./pages/Home";
 import { AuthProvider } from "./context/Auth";
-import { WishList } from "./components/WishList";
-import { WishListProvider } from "./context/WishList";
+
+import { useWishList, WishListProvider } from "./context/WishList";
+import { Cart } from "./pages/Cart";
+import { AppBar } from "./components/AppBar";
+import React from "react";
+import { WishList } from "./pages/WishList";
+import { CartProvider } from "./context/CartList";
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         <WishListProvider>
-          <Routes>
-            <Route path="/signup" element={<Signup />}></Route>
-            <Route path="/signin" element={<Signin />}></Route>
-            <Route path="/" element={<Home />}></Route>
-            <Route path="/wishlist" element={<WishList />}></Route>
-          </Routes>
+          <CartProvider>
+            <Routes>
+              <Route path="/signup" element={<Signup />}></Route>
+              <Route path="/signin" element={<Signin />}></Route>
+
+              <Route path="/" element={<Home />}></Route>
+              <Route path="/wishlist" element={<WishList />}></Route>
+              <Route path="/cart" element={<Cart />}></Route>
+            </Routes>
+          </CartProvider>
         </WishListProvider>
       </AuthProvider>
     </Router>

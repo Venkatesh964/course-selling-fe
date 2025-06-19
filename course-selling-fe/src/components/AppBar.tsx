@@ -4,8 +4,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/Auth";
 
-export const AppBar = ({ handleWishList }: { handleWishList: any }) => {
+export const AppBar = () => {
   const [searchCourse, setSearchCourse] = useState("");
+  const navigate = useNavigate();
 
   //@ts-ignore
   const { handleLogout } = useAuth();
@@ -13,6 +14,18 @@ export const AppBar = ({ handleWishList }: { handleWishList: any }) => {
     setSearchCourse(e.target.value);
   };
 
+  const handleCart = () => {
+    navigate("/cart");
+  };
+
+  function handleWishList(): void {
+    navigate("/wishlist");
+  }
+
+  const jsonObj = JSON.parse(
+    localStorage.getItem("user") ?? '{firstName:"A", lastName:`N`}'
+  );
+  const name = jsonObj.firstName[0] + jsonObj.lastName[0];
   return (
     <div className="border-b border-slate-300">
       <div className="flex justify-between py-3 px-4">
@@ -39,11 +52,14 @@ export const AppBar = ({ handleWishList }: { handleWishList: any }) => {
           >
             <WishListIcon textColor={""} />
           </div>
-          <div className="cursor-pointer  hover:bg-violet-200">
+          <div
+            className="cursor-pointer  hover:bg-violet-200"
+            onClick={handleCart}
+          >
             <Cart />
           </div>
           <div className="cursor-pointer relative">
-            <Circle person={"AN"} width={8} height={8} />
+            <Circle person={name} width={"2rem"} height={"2rem"} />
             <div className="absolute border border-slate-300 w-20 right-0 mt-2">
               <button
                 className="cursor-pointer bg-slate-300 w-full"
@@ -65,12 +81,13 @@ export function Circle({
   height,
 }: {
   person: string;
-  width: number;
-  height: number;
+  width: string;
+  height: string;
 }) {
   return (
     <div
-      className={`w-${width} h-${height} flex justify-center items-center rounded-full border border-slate-300 font-semibold text-white bg-black`}
+      className={`flex justify-center items-center rounded-full border border-slate-300 font-semibold text-white bg-black`}
+      style={{ width: width, height: height }}
     >
       {person}
     </div>
