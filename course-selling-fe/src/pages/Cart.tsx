@@ -1,10 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar } from "../components/AppBar";
 import { useCart } from "../context/CartList";
+import axios from "axios";
 
 export const Cart = () => {
-  //@ts-ignore
-  const { cart } = useCart();
+  const [cart, setCart] = useState([]);
+  const [flag, setFlag] = useState(false);
+
+  const getCartItems = async () => {
+    const response = await fetch("http://localhost:3000/api/v1/user/cart", {
+      method: "GET",
+      credentials: "include",
+    });
+    const cartData = await response.json();
+    console.log(cartData);
+    //@ts-ignore
+    setCart(cartData.coursesData);
+  };
+  useEffect(() => {
+    getCartItems();
+  }, [flag]);
+
+  async function handleRemoveCartItem(_id: any) {
+    try {
+      console.log("in delete method of wishlist");
+      const response = await fetch("http://localhost:3000/api/v1/user/cart", {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courseId: _id,
+        }),
+      });
+      const deletedItem = await response.json();
+      setFlag(!flag);
+      console.log(deletedItem);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <div>
       <AppBar />
@@ -37,7 +74,12 @@ export const Cart = () => {
                     </div>
                     <div className="flex gap-8">
                       <div className="flex flex-col gap-2">
-                        <div className="text-right">Remove</div>
+                        <div
+                          className="text-right hover:bg-gray-200 cursor-pointer hover:rounded-md px-2"
+                          onClick={() => handleRemoveCartItem(item._id)}
+                        >
+                          Remove
+                        </div>
                         <div className="text-right">Move to Wishlist</div>
                       </div>
                       <div>

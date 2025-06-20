@@ -20,14 +20,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const handleLogin = async (e: any) => {
     e.preventDefault();
     try {
-      const userData = await axios.post(
-        "http://localhost:3000/api/v1/user/signin",
-        {
+      const response = await fetch("http://localhost:3000/api/v1/user/signin", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           email: formData.email,
           password: formData.password,
-        }
-      );
-      localStorage.setItem("user", JSON.stringify(userData.data.user));
+        }),
+      });
+      const userData = await response.json();
+      console.log(userData);
+      //localStorage.setItem("user", JSON.stringify(userData.data.user));
       navigate("/");
     } catch (e) {
       console.log(e);

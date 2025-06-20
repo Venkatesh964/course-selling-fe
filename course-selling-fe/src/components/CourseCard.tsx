@@ -12,14 +12,51 @@ export const CourseCard = ({
   courseData: CourseDataProps[] | undefined;
   author: string;
 }) => {
-  //@ts-ignore
-  const { wishList, setWishList } = useWishList();
-  //@ts-ignore
-  const { cart, setCart } = useCart();
-
   useEffect(() => {
     // setCart(courseData?.slice(0, 3));
   }, []);
+
+  const handleAddCart = async (courseId: string) => {
+    try {
+      console.log("here in add cart request");
+      const response = await fetch("http://localhost:3000/api/v1/user/cart", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courseId: courseId,
+        }),
+      });
+      const cartItem = await response.json();
+      console.log(cartItem);
+    } catch (e) {
+      console.log(`Failed to add the item to cart`, e);
+    }
+  };
+
+  const handleWishlist = async (courseId: string) => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/v1/user/wishlist",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            courseId: courseId,
+          }),
+        }
+      );
+      const wishlistItem = await response.json();
+      console.log(wishlistItem);
+    } catch (e) {
+      console.log(`Failed to add the item to cart`, e);
+    }
+  };
   return (
     <div className="grid grid-cols-5 gap-4 ">
       {courseData?.map((course: CourseDataProps) => (
@@ -36,19 +73,13 @@ export const CourseCard = ({
           <div className="flex gap-2 px-2 py-2">
             <button
               className=" border border-slate-300 bg-violet-600 flex-1 py-1 rounded-md  cursor-pointer font-semibold"
-              onClick={() => {
-                console.log("adding items to cart ...");
-                setCart((cart: any) => [...cart, course]);
-              }}
+              onClick={() => handleAddCart(course._id)}
             >
               <span className="text-white "> Add to Cart</span>
             </button>
             <button
               className="border border-violet-400 rounded-full px-2 py-2 cursor-pointer hover:bg-violet-50"
-              onClick={() => {
-                console.log("wishlisting the items");
-                setWishList((prev: any) => [...prev, course]);
-              }}
+              onClick={() => handleWishlist(course._id)}
             >
               <WishListIcon textColor="text-violet-500" />
             </button>

@@ -40,15 +40,17 @@ const purchaseSchema = new Schema({
 });
 
 const wishlistSchema = new Schema({
-  title: String,
-  description: String,
-  imageUrl: String,
-  creatorId: ObjectId,
   userId: ObjectId,
+  courseId: ObjectId,
 });
 
+const cartSchema = new Schema({
+  userId: ObjectId,
+  courseId: ObjectId,
+});
 export const userModel = mongoose.model("user", userSchema);
 export const adminModel = mongoose.model("admin", adminSchema);
 export const courseModel = mongoose.model("course", courseSchema);
 export const purchaseModel = mongoose.model("purchase", purchaseSchema);
 export const wishlistModel = mongoose.model("wishlist", wishlistSchema);
+export const cartModel = mongoose.model("cart", cartSchema);

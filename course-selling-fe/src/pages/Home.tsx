@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { CourseCard } from "../components/CourseCard";
 
 export interface CourseDataProps {
+  _id: string;
   description: string;
   imageUrl: string;
   price: Number;
