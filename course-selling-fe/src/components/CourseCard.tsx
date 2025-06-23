@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useCart } from "../context/CartList";
+
 import { useWishList } from "../context/WishList";
 import type { CourseDataProps } from "../pages/Home";
 import { wishList } from "../utils/wishlist";

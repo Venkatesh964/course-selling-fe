@@ -1,28 +1,37 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import type { CourseDataProps } from "../pages/Home";
 
 //@ts-ignore
 const cartContext = createContext();
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [cart, setCart] = useState([]);
+  const [courseData, setCourseData] = useState<CourseDataProps[]>();
 
-  const getCartItems = async () => {
-    const response = await axios.get("http://localhost:3000/api/v1/user/cart", {
-      withCredentials: true,
-    });
-    console.log(response);
+  const getCourses = async () => {
+    try {
+      const courseData = await axios.get(
+        "http://localhost:3000/api/v1/user/bulk",
+        {
+          withCredentials: true,
+        }
+      );
+      setCourseData(courseData.data.courses.slice(3));
+    } catch (e) {
+      console.log(e);
+    }
   };
+
   useEffect(() => {
-    getCartItems();
+    getCourses();
   }, []);
   return (
-    <cartContext.Provider value={{ cart, setCart }}>
+    <cartContext.Provider value={{ courseData, setCourseData }}>
       {children}
     </cartContext.Provider>
   );
 };
 
-export const useCart = () => {
+export const useCourse = () => {
   return useContext(cartContext);
 };

@@ -71,11 +71,12 @@ userRouter.get("/purchases", userMiddleware, async (req, res) => {
   try {
     //@ts-ignore
     const userId = req.userId.id;
+    // const purchases = await purchaseModel.find({
+    //   userId: userId,
+    // });
+    const purchases = await purchaseModel.find({ userId: userId });
 
-    const purchases = await purchaseModel.find({
-      userId,
-    });
-
+    console.log(`purchases `, purchases);
     let purchasedCourseIds = [];
 
     for (let i = 0; i < purchases.length; i++) {

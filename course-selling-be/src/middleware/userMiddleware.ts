@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 function userMiddleware(req: Request, res: Response, next: NextFunction) {
-  console.log(req.cookies);
   const authorization = req.cookies.access_token.split(" ")[1];
   console.log(authorization);
   if (!authorization) {
@@ -10,8 +9,8 @@ function userMiddleware(req: Request, res: Response, next: NextFunction) {
     return;
   }
   try {
+    console.log(process.env.JWT_USER_SECRET);
     const user = jwt.verify(authorization, process.env.JWT_USER_SECRET || "");
-
     //@ts-ignore
     req.userId = user.id;
     next();

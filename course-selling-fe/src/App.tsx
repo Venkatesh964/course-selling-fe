@@ -10,6 +10,7 @@ import { AppBar } from "./components/AppBar";
 import React from "react";
 import { WishList } from "./pages/WishList";
 import { CartProvider } from "./context/CartList";
+import { Purchase } from "./pages/Purchase";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="/" element={<Home />}></Route>
               <Route path="/wishlist" element={<WishList />}></Route>
               <Route path="/cart" element={<Cart />}></Route>
+              <Route path="/purchases" element={<Purchase />}></Route>
             </Routes>
           </CartProvider>
         </WishListProvider>

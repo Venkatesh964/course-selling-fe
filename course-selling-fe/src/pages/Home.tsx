@@ -3,6 +3,7 @@ import { AppBar, Circle } from "../components/AppBar";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { CourseCard } from "../components/CourseCard";
+import { useCourse } from "../context/CartList";
 
 export interface CourseDataProps {
   _id: string;
@@ -14,28 +15,8 @@ export interface CourseDataProps {
 
 export const Home = () => {
   const navigate = useNavigate();
-  const [courseData, setCourseData] = useState<CourseDataProps[]>();
-
-  useEffect(() => {
-    getCourses();
-  }, []);
-
-  const getCourses = async () => {
-    try {
-      const courseData = await axios.get(
-        "http://localhost:3000/api/v1/user/bulk",
-        {
-          // headers: {
-          //   Authorization: `Bearer ` + localStorage.getItem("token"),
-          // },
-          withCredentials: true,
-        }
-      );
-      setCourseData(courseData.data.courses.slice(3));
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //@ts-ignore
+  const { courseData } = useCourse();
 
   const jsonObj = JSON.parse(
     localStorage.getItem("user") ?? '{firstName:"A", lastName:`N`}'

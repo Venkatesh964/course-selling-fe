@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AppBar } from "../components/AppBar";
-import { useCart } from "../context/CartList";
+
 import axios from "axios";
 
 export const Cart = () => {
@@ -41,6 +41,38 @@ export const Cart = () => {
       console.log(e);
     }
   }
+
+  const handleBuyCartItems = async () => {
+    console.log("handlding buying of items ");
+    try {
+      const response = async (courseId: string) =>
+        await fetch("http://localhost:3000/api/v1/course/purchase", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            courseId: courseId,
+          }),
+        });
+      let promiseArray = [];
+      for (let i = 0; i < cart.length; i++) {
+        //@ts-ignore
+        promiseArray.push(await response(cart[i]._id));
+      }
+      console.log(Promise.all(promiseArray));
+      let t = [];
+      for (let i = 0; i < cart.length; i++) {
+        //@ts-ignore
+        t.push(await handleRemoveCartItem(cart[i]._id));
+      }
+      Promise.all(t);
+      setCart([]);
+    } catch (e) {
+      console.log("failed to buy the courses ", e);
+    }
+  };
 
   return (
     <div>
@@ -95,8 +127,11 @@ export const Cart = () => {
               <div className="font-bold text-3xl py-1">₹1,437</div>
               <div className="text-gray-700 line-through py-1">₹9,257</div>
               <div className="pb-4">84% off</div>
-              <button className="px-4 py-2 border border-slate-200 bg-violet-600 text-white rounded-md font-semibold cursor-pointer hover:bg-violet-400">
-                Proceed to checkout
+              <button
+                className="px-4 py-2 border border-slate-200 bg-violet-600 text-white rounded-md font-semibold cursor-pointer hover:bg-violet-400"
+                onClick={handleBuyCartItems}
+              >
+                Buy
               </button>
             </div>
           </div>

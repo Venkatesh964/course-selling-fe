@@ -3,15 +3,27 @@ import { Input } from "./Input";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/Auth";
+import { useCourse } from "../context/CartList";
 
 export const AppBar = () => {
   const [searchCourse, setSearchCourse] = useState("");
+  //@ts-ignore
+  const { courseData, setCourseData } = useCourse();
   const navigate = useNavigate();
 
   //@ts-ignore
   const { handleLogout } = useAuth();
-  const handleCourseSearch = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCourseSearch = async (e: ChangeEvent<HTMLInputElement>) => {
     setSearchCourse(e.target.value);
+    // if (!e.target.value) return;
+    const response = await axios.get(
+      `http://localhost:3000/api/v1/course/${e.target.value}`,
+      {
+        withCredentials: true,
+      }
+    );
+    // setCourseData(response.data.response);
+    console.log(response);
   };
 
   const handleCart = () => {
@@ -46,6 +58,12 @@ export const AppBar = () => {
           </div>
         </div>
         <div className="flex gap-4 items-center">
+          <div
+            className="cursor-pointer hover:bg-gray-300 px-2 py-1 rounded-md"
+            onClick={() => navigate("/purchases")}
+          >
+            My Purchases
+          </div>
           <div
             className="cursor-pointer hover:bg-violet-200"
             onClick={handleWishList}
